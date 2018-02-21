@@ -1,9 +1,10 @@
 import PublicIP from 'public-ip';
 import {getRecordIP, updateRecordIP} from "./awsService";
 import {updateInterval} from "./config";
+import {formatNow} from "./timeService";
 
 const syncIPIfNeeded = async () => {
-  console.log('\nsyncIPIfNeeded start at:', new Date());
+  console.log('\nsyncIPIfNeeded start at:', formatNow());
   try {
     const computerPublicIP = await PublicIP.v4();
     const recordIP = await getRecordIP();
@@ -18,13 +19,15 @@ const syncIPIfNeeded = async () => {
   } catch (error) {
     console.error('Update Record IP Fail:', error);
   } finally {
-    console.log('syncIPIfNeeded end at:', new Date());
+    console.log('syncIPIfNeeded end at:', formatNow());
   }
 };
 
+console.log('\nit works!');
+
+(async () => await syncIPIfNeeded())();
 setInterval(async () => {
   await syncIPIfNeeded();
 }, updateInterval);
 
 
-console.log('\nit works!');
