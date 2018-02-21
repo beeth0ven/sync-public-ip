@@ -26,4 +26,5 @@ setInterval(async () => {
   await syncIPIfNeeded();
 }, updateInterval);
 
-console.log('it works!');
+
+console.log('\nit works!');
