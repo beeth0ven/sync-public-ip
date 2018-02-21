@@ -1,7 +1,7 @@
 import PublicIP from 'public-ip';
-import {getRecordIP, updateRecordIP} from "./awsService";
+import {getRecordIP, updateRecordIP} from "./services/awsService";
 import {updateInterval} from "./config";
-import {formatNow} from "./timeService";
+import {formatNow} from "./services/timeService";
 
 const syncIPIfNeeded = async () => {
   console.log('\nsyncIPIfNeeded start at:', formatNow());
@@ -26,6 +26,7 @@ const syncIPIfNeeded = async () => {
 console.log('\nit works!');
 
 (async () => await syncIPIfNeeded())();
+
 setInterval(async () => {
   await syncIPIfNeeded();
 }, updateInterval);

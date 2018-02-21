@@ -1,6 +1,6 @@
 import AWS from 'aws-sdk';
-import {region} from './config.js';
-import {hostedZoneId, recordName} from "./config";
+import {region} from '../config.js';
+import {hostedZoneId, recordName} from "../config";
 
 AWS.config.update({region});
 const route53 = new AWS.Route53();
