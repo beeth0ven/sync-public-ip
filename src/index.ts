@@ -1,1 +1,4 @@
-console.log('It works!')
+
+
+require('./environment')
+require('./syncip')

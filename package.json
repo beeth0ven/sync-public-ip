@@ -20,9 +20,14 @@
   },
   "homepage": "https://github.com/beeth0ven/sync-public-ip#readme",
   "devDependencies": {
+    "@types/dotenv": "^6.1.0",
     "@types/node": "^10.12.18",
     "nodemon": "^1.18.9",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2"
+  },
+  "dependencies": {
+    "aws-sdk": "^2.382.0",
+    "dotenv": "^6.2.0"
   }
 }
