@@ -22,12 +22,15 @@
   "devDependencies": {
     "@types/dotenv": "^6.1.0",
     "@types/node": "^10.12.18",
+    "@types/public-ip": "^2.4.0",
     "nodemon": "^1.18.9",
     "ts-node": "^7.0.1",
     "typescript": "^3.2.2"
   },
   "dependencies": {
     "aws-sdk": "^2.382.0",
-    "dotenv": "^6.2.0"
+    "dotenv": "^6.1.0",
+    "public-ip": "^2.4.0",
+    "rxfeedback": "^1.0.0"
   }
 }
