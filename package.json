@@ -2,11 +2,11 @@
   "name": "sync-public-ip",
   "version": "1.0.0",
   "description": "",
-  "main": "src/index.js",
+  "main": "src",
   "scripts": {
     "start": "npm run build:live",
     "build": "tsc -p .",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src/index.ts"
+    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src"
   },
   "repository": {
     "type": "git",
