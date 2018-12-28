@@ -4,9 +4,9 @@
   "description": "",
   "main": "src",
   "scripts": {
-    "start": "npm run build:live",
+    "start": "node dist",
     "build": "tsc -p .",
-    "build:live": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src"
+    "dev": "nodemon --watch 'src/**/*.ts' --exec 'ts-node' src"
   },
   "repository": {
     "type": "git",

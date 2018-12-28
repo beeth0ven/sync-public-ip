@@ -6,7 +6,7 @@ import { UpdateIp } from '../state/UpdateIp';
 import { map } from 'rxjs/operators';
 import { logBeauty } from '../public/logger';
 
-(async () => {
+(() => {
 
     const route53Service = new Route53Service(region)
 
@@ -14,7 +14,7 @@ import { logBeauty } from '../public/logger';
         () => from(PublicIp.v4()),
         (ip) => route53Service.updateRecordIp(ip, hostedZoneId, recordName),
         [
-            () => interval(updateInterval).pipe(map(() => ({ kind: 'OnTriggerGetPublicIp' } as UpdateIp.Mutation)))
+            () => interval(updateInterval * 1000).pipe(map(() => ({ kind: 'OnTriggerGetPublicIp' } as UpdateIp.Mutation)))
         ]
     )
         .forEach(value => {
