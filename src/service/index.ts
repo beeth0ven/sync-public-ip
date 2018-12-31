@@ -1,20 +1,19 @@
-import { provider } from "../config";
-import { Observable } from "rxjs";
-import { createUpdateIp } from "./route53";
+import { Provider } from "../config/Provider";
+import { createAWSUpdateIp } from "./route53";
+import { createDigitalOceanUpdateIp } from "./digitalocean";
+import { UpdateIp } from "../internal/UpdateIp";
 
-const chooseUpdateIp: () => (ip: string) => Observable<string> = () => {
-    switch (provider) {
+const chooseUpdateIp: (provider: Provider) => UpdateIp = (provider) => {
+    switch (provider.name) {
         case 'AWS':
-            return createUpdateIp()
+            return createAWSUpdateIp(provider.config)
         case 'DigitalOcean':
-            return createUpdateIp()
+            return createDigitalOceanUpdateIp(provider.config)
         default:
             throw new Error(`Unknown provider: ${provider}`)
     }
 }
 
-const updateIp = createUpdateIp()
-
 export {
-    updateIp
+    chooseUpdateIp
 }

@@ -1,18 +1,20 @@
 import PublicIp from 'public-ip'
-import { updateInterval } from '../config';
+import { updateInterval, provider } from '../config';
 import { from, interval } from 'rxjs';
-import { UpdateIp } from '../state/UpdateIp';
+import { Main } from '../state/Main';
 import { map } from 'rxjs/operators';
 import { logBeauty } from '../public/logger';
-import { updateIp } from '../service';
+import { chooseUpdateIp } from '../service';
 
 (() => {
 
-    UpdateIp.rxSystem(
+    const updateIp = chooseUpdateIp(provider)
+
+    Main.rxSystem(
         () => from(PublicIp.v4()),
         updateIp,
         [
-            () => interval(updateInterval * 1000).pipe(map(() => ({ kind: 'OnTriggerGetPublicIp' } as UpdateIp.Mutation)))
+            () => interval(updateInterval * 1000).pipe(map(() => ({ kind: 'OnTriggerGetPublicIp' } as Main.Mutation)))
         ]
     )
         .forEach(value => {

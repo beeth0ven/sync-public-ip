@@ -1,10 +1,10 @@
-import { type } from "os";
 import { Observable, of } from "rxjs";
 import { map, catchError, retry } from "rxjs/operators";
 import { FeedbackLoop, system, Feedbacks, defaultRetryStrategy } from "rxfeedback";
 import { logWithTime, logBeauty } from "../public/logger";
+import { UpdateIp } from "../internal/UpdateIp";
 
-export namespace UpdateIp {
+export namespace Main {
 
     export type State = {
         domainIp: string | null,
@@ -87,7 +87,7 @@ export namespace UpdateIp {
 
     export function rxSystem(
         getPublicIp: () => Observable<string>,
-        updateRecordIp: (ip: string) => Observable<string>,
+        updateIp: UpdateIp,
         feedback: FeedbackLoop<State, Mutation>[]
     ): Observable<State> {
         const queryGetPublicIp: FeedbackLoop<State, Mutation> = Feedbacks.react(
@@ -103,7 +103,7 @@ export namespace UpdateIp {
         )
         const queryUpdateRecordIp: FeedbackLoop<State, Mutation> = Feedbacks.react(
             updateDomainIpQuery,
-            (query) => updateRecordIp(query)
+            (query) => updateIp(query)
                 .pipe(
                     retry(3),
                     map((ip) => ({ kind: 'OnUpdateDomainIpSuccess', ip } as Mutation)),
