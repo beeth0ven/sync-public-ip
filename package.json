@@ -29,7 +29,9 @@
   },
   "dependencies": {
     "aws-sdk": "^2.382.0",
+    "do-wrapper": "^3.19.0",
     "dotenv": "^6.1.0",
+    "moment": "^2.23.0",
     "public-ip": "^2.4.0",
     "rxfeedback": "^1.0.0"
   }

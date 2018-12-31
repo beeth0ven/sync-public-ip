@@ -1,10 +1,6 @@
 import dotenv from "dotenv";
 
-const isValid = () => process.env.AWS_ACCESS_KEY_ID != null
-    && process.env.AWS_SECRET_ACCESS_KEY != null
-    && process.env.REGION != null
-    && process.env.HOSTED_ZONE_ID != null
-    && process.env.RECORD_NAME != null
+const isValid = () => process.env.PROVIDER != null
 
 if (!isValid()) {
     dotenv.config()

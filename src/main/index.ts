@@ -1,18 +1,16 @@
 import PublicIp from 'public-ip'
-import { recordName, hostedZoneId, region, updateInterval } from '../config';
-import Route53Service from '../service/Rout53Service';
+import { updateInterval } from '../config';
 import { from, interval } from 'rxjs';
 import { UpdateIp } from '../state/UpdateIp';
 import { map } from 'rxjs/operators';
 import { logBeauty } from '../public/logger';
+import { updateIp } from '../service';
 
 (() => {
 
-    const route53Service = new Route53Service(region)
-
     UpdateIp.rxSystem(
         () => from(PublicIp.v4()),
-        (ip) => route53Service.updateRecordIp(ip, hostedZoneId, recordName),
+        updateIp,
         [
             () => interval(updateInterval * 1000).pipe(map(() => ({ kind: 'OnTriggerGetPublicIp' } as UpdateIp.Mutation)))
         ]
