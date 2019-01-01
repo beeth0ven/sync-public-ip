@@ -14,3 +14,21 @@ export type DigitalOceanConfig = {
     recordId: number,
 }
 
+export const description: (provider: Provider) => string = provider => {
+    let value: any
+    switch (provider.name) {
+        case 'DigitalOcean':
+            value = {
+                name: provider.name,
+                config: {
+                    ...provider.config,
+                    token: undefined,
+                }
+            }
+            break
+        default:
+            value = provider
+            break
+    }
+    return  JSON.stringify(value, null, 4)
+}

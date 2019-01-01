@@ -16,7 +16,7 @@ export namespace Main {
         updateDomainIpError: string | null,
         triggerUpdateDomainIp: boolean,
     }
-
+ 
     function publicIpQuery(state: State): void | null {
         return state.triggerGetPublicIp ? void 0 : null
     }

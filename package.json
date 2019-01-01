@@ -21,6 +21,8 @@
   "homepage": "https://github.com/beeth0ven/sync-public-ip#readme",
   "devDependencies": {
     "@types/dotenv": "^6.1.0",
+    "@types/moment": "^2.13.0",
+    "@types/moment-timezone": "^0.5.10",
     "@types/node": "^10.12.18",
     "@types/public-ip": "^2.4.0",
     "nodemon": "^1.18.9",
@@ -31,7 +33,7 @@
     "aws-sdk": "^2.382.0",
     "do-wrapper": "^3.19.0",
     "dotenv": "^6.1.0",
-    "moment": "^2.23.0",
+    "moment-timezone": "^0.5.10",
     "public-ip": "^2.4.0",
     "rxfeedback": "^1.0.0"
   }
