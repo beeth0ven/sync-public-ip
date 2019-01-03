@@ -1,19 +1,19 @@
 import { Observable, of } from "rxjs";
-import { map, catchError, retry } from "rxjs/operators";
+import { map, catchError } from "rxjs/operators";
 import { FeedbackLoop, system, Feedbacks, defaultRetryStrategy } from "rxfeedback";
 import { logWithTime, logBeauty } from "../public/logger";
 import { UpdateIp } from "../internal/UpdateIp";
+import { catchErrorReturnJust } from "../public/rxjs/catchError";
 
 export namespace Main {
 
     export type State = {
         domainIp: string | null,
-
         publicIp: string | null,
-        publicIpError: string | null,
+        publicIpError: any | null,
         triggerGetPublicIp: boolean,
 
-        updateDomainIpError: string | null,
+        updateDomainIpError: any | null,
         triggerUpdateDomainIp: boolean,
     }
  
@@ -26,11 +26,19 @@ export namespace Main {
     }
 
     export type Mutation =
-        { kind: 'OnTriggerGetPublicIp' } |
-        { kind: 'OnGetPublicIpSuccess', ip: string } |
-        { kind: 'OnGetPublicIpError', error: any } |
-        { kind: 'OnUpdateDomainIpSuccess', ip: string } |
-        { kind: 'OnUpdateDomainIpError', error: any }
+        { kind: 'onTriggerGetPublicIp' } |
+        { kind: 'onGetPublicIpSuccess', ip: string } |
+        { kind: 'onGetPublicIpError', error: any } |
+        { kind: 'onUpdateDomainIpSuccess', ip: string } |
+        { kind: 'onUpdateDomainIpError', error: any }
+
+    export namespace Mutation {
+        export const onTriggerGetPublicIp = () => ({ kind: 'onTriggerGetPublicIp' } as Mutation)
+        export const onGetPublicIpSuccess = (ip: string) => ({ kind: 'onGetPublicIpSuccess', ip } as Mutation)
+        export const onGetPublicIpError = (error: any) => ({ kind: 'onGetPublicIpError', error } as Mutation)
+        export const onUpdateDomainIpSuccess = (ip: string) => ({ kind: 'onUpdateDomainIpSuccess', ip } as Mutation)
+        export const onUpdateDomainIpError = (error: any) => ({ kind: 'onUpdateDomainIpError', error } as Mutation)
+    }
 
     const initialState: State = {
         domainIp: null,
@@ -45,14 +53,14 @@ export namespace Main {
         logWithTime('Mutation:')
         logBeauty(mutation)
         switch (mutation.kind) {
-            case 'OnTriggerGetPublicIp':
+            case 'onTriggerGetPublicIp':
                 return {
                     ...state,
                     triggerGetPublicIp: true,
                     publicIp: null,
                     publicIpError: null,
                 }
-            case 'OnGetPublicIpSuccess':
+            case 'onGetPublicIpSuccess':
                 return {
                     ...state,
                     triggerGetPublicIp: false,
@@ -62,25 +70,25 @@ export namespace Main {
                     triggerUpdateDomainIp: mutation.ip != state.domainIp,
                     updateDomainIpError: null,
                 }
-            case 'OnGetPublicIpError':
+            case 'onGetPublicIpError':
                 return {
                     ...state,
                     triggerGetPublicIp: false,
                     publicIp: null,
-                    publicIpError: JSON.stringify(mutation.error, null),
+                    publicIpError: mutation.error,
                 }
-            case 'OnUpdateDomainIpSuccess':
+            case 'onUpdateDomainIpSuccess':
                 return {
                     ...state,
                     triggerUpdateDomainIp: false,
                     domainIp: mutation.ip,
                     updateDomainIpError: null,
                 }
-            case 'OnUpdateDomainIpError':
+            case 'onUpdateDomainIpError':
                 return {
                     ...state,
                     triggerUpdateDomainIp: false,
-                    updateDomainIpError: JSON.stringify(mutation.error, null),
+                    updateDomainIpError: mutation.error,
                 }
         }
     }
@@ -94,9 +102,8 @@ export namespace Main {
             publicIpQuery,
             () => getPublicIp()
                 .pipe(
-                    retry(3),
-                    map((ip) => ({ kind: 'OnGetPublicIpSuccess', ip } as Mutation)),
-                    catchError((error) => of({ kind: 'OnGetPublicIpError', error } as Mutation))
+                    map(Mutation.onGetPublicIpSuccess),
+                    catchErrorReturnJust(Mutation.onGetPublicIpError)
                 )
             ,
             defaultRetryStrategy()
@@ -105,9 +112,8 @@ export namespace Main {
             updateDomainIpQuery,
             (query) => updateIp(query)
                 .pipe(
-                    retry(3),
-                    map((ip) => ({ kind: 'OnUpdateDomainIpSuccess', ip } as Mutation)),
-                    catchError((error) => of({ kind: 'OnUpdateDomainIpError', error } as Mutation))
+                    map(Mutation.onUpdateDomainIpSuccess),
+                    catchErrorReturnJust(Mutation.onUpdateDomainIpError)
                 )
             ,
             defaultRetryStrategy()

@@ -13,13 +13,10 @@ import { chooseUpdateIp } from '../service';
     Main.rxSystem(
         () => from(PublicIp.v4()),
         updateIp,
-        [
-            () => interval(updateInterval * 1000).pipe(map(() => ({ kind: 'OnTriggerGetPublicIp' } as Main.Mutation)))
-        ]
-    )
-        .forEach(value => {
-            console.log('State:')
-            logBeauty(value)
-            console.log('')
-        })
+        [() => interval(updateInterval * 1000).pipe(map(Main.Mutation.onTriggerGetPublicIp))]
+    ).forEach(value => {
+        console.log('State:')
+        logBeauty(value)
+        console.log('')
+    })
 })()
