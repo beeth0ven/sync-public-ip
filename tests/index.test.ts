@@ -10,8 +10,8 @@ it('test the main system', () => {
     scheduler.run(helpers => {
         const { cold, expectObservable } = helpers
         
-        const mutations =   cold('------m---', { m: Main.Mutation.onTriggerGetPublicIp() })
-        const expected =        ['(abc)-(de)', {
+        const mutations =      cold('------m---', { m: Main.Mutation.onTriggerGetPublicIp() })
+        const expected = { marbles: '(abc)-(de)', values: {
             a: {
                 domainIp: null,
                 publicIp: null,
@@ -52,7 +52,7 @@ it('test the main system', () => {
                 updateDomainIpError: null,
                 triggerUpdateDomainIp: false,
             },
-        }]
+        }}
 
         const states = Main.rxSystem(
             () => of('10.0.0.1'),
@@ -62,6 +62,6 @@ it('test the main system', () => {
             ]
         )
 
-        expectObservable(states).toBe(expected[0] as string, expected[1])
+        expectObservable(states).toBe(expected.marbles, expected.values)
     })
 })
