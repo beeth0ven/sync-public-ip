@@ -1,5 +1,8 @@
 # sync-public-ip
 [![Build Status](https://travis-ci.org/beeth0ven/sync-public-ip.svg?branch=master)](https://travis-ci.org/beeth0ven/sync-public-ip)
+[![Version](https://img.shields.io/github/license/beeth0ven/sync-public-ip.svg)](https://github.com/beeth0ven/sync-public-ip/blob/master/LICENSE)
+![Tag](https://img.shields.io/github/tag/beeth0ven/sync-public-ip.svg)
+![Top Language](https://img.shields.io/github/languages/top/beeth0ven/sync-public-ip.svg)
 
 Sync local machine's public ip with domain by using a dns service like: AWSRoute53 or Digital Ocean.
 
