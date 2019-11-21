@@ -6,7 +6,7 @@ import { logBeauty } from '../public/logger';
 import { chooseUpdateIp } from '../service';
 import { getPublicIp } from "../service/getpublicip";
 
-(() => {
+(async () => {
 
     const updateIp = chooseUpdateIp(provider)
 

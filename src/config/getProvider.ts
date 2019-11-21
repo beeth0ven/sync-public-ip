@@ -1,10 +1,12 @@
-import { Provider, AWSConfig, DigitalOceanConfig } from "./Provider";
+import { Provider, AWSConfig, DigitalOceanConfig, AWSLightsailConfig } from "./Provider";
 
 export const getProvider: () => Provider = () => {
     const provider = process.env.PROVIDER
     switch (provider) {
         case 'AWS':     
             return { name: 'AWS', config: getAWSConfig() } 
+        case 'AWS-Lightsail':
+            return { name: 'AWS-Lightsail', config: getAWSLightsailConfig() } 
         case 'DigitalOcean':    
             return { name: 'DigitalOcean', config: getDigitalOceanConfig() } 
         default:
@@ -35,6 +37,30 @@ const getAWSConfig: () => AWSConfig = () => {
     } 
     
 }
+
+const getAWSLightsailConfig: () => AWSLightsailConfig = () => {
+
+    const isValid = () => process.env.AWS_ACCESS_KEY_ID != null
+        && process.env.AWS_SECRET_ACCESS_KEY != null
+        && process.env.AWS_REGION != null
+        && process.env.AWS_DOMAIN_NAME != null
+        && process.env.AWS_DOMAIN_ENTRY_NAME != null
+
+    if (!isValid()) {
+        throw new Error('AWS lightsail environment variable is not valid!')
+    }
+
+    const region = process.env.AWS_REGION!
+    const domainName = process.env.AWS_DOMAIN_NAME!
+    const domainEntryName = process.env.AWS_DOMAIN_ENTRY_NAME!
+
+    return {
+        region,
+        domainName,
+        domainEntryName,
+    }
+}
+
 
 const getDigitalOceanConfig: () => DigitalOceanConfig = () => {
 

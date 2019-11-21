@@ -1,11 +1,18 @@
 export type Provider = 
     { name: 'AWS', config: AWSConfig } |
+    { name: 'AWS-Lightsail', config: AWSLightsailConfig } |
     { name: 'DigitalOcean', config: DigitalOceanConfig }
 
 export type AWSConfig = {
     region: string,
     hostedZoneId: string,
     recordName: string,
+}
+
+export type AWSLightsailConfig = {
+    region: string,
+    domainName: string,
+    domainEntryName: string,
 }
 
 export type DigitalOceanConfig = {
