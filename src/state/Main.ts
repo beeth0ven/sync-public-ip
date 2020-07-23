@@ -1,5 +1,5 @@
-import { Observable, of } from "rxjs";
-import { map, catchError } from "rxjs/operators";
+import { Observable } from "rxjs";
+import { map, timeout } from "rxjs/operators";
 import { FeedbackLoop, system, Feedbacks, defaultRetryStrategy } from "rxfeedback";
 import { logWithTime, logBeauty } from "../public/logger";
 import { UpdateIp } from "../internal/UpdateIp";
@@ -102,6 +102,7 @@ export namespace Main {
             publicIpQuery,
             () => getPublicIp()
                 .pipe(
+                    timeout(30_000),
                     map(Mutation.onGetPublicIpSuccess),
                     catchErrorReturnJust(Mutation.onGetPublicIpError)
                 )
@@ -112,6 +113,7 @@ export namespace Main {
             updateDomainIpQuery,
             (query) => updateIp(query)
                 .pipe(
+                    timeout(30_000),
                     map(Mutation.onUpdateDomainIpSuccess),
                     catchErrorReturnJust(Mutation.onUpdateDomainIpError)
                 )
