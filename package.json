@@ -39,6 +39,7 @@
     "dotenv": "^6.1.0",
     "moment-timezone": "^0.5.10",
     "public-ip": "^2.4.0",
-    "rxfeedback": "^1.0.0"
+    "rxfeedback": "^1.0.0",
+    "axios": "^0.21.1"
   }
 }
