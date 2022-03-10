@@ -1,22 +1,42 @@
 import { Observable } from 'rxjs';
 import * as https from "https";
 import axios from 'axios';
+import { LinkSysApis, LinkSysSessionApis } from 'link-sys-api';
 
-export function getPublicIp(): Observable<string> {
+export function getPublicIpFromLinkSysSession(): Observable<string> {
+  const apis = new LinkSysSessionApis(
+    axios,
+    process.env.LINK_SYS_SESSION_ENDPOINT!,
+    process.env.LINK_SYS_USERNAME!,
+    process.env.LINK_SYS_PASSWORD!
+  );
   return new Observable<string>((observer) => {
-    axios.post(process.env.LINK_SYS_ENDPOINT!, {}, {
-      headers: {
-        'X-JNAP-Action': 'http://linksys.com/jnap/router/GetWANStatus',
-        'X-JNAP-Authorization': process.env.LINK_SYS_AUTHORIZATION,
-        'Content-Type': 'application/json',
-      }
-    }).then((response) => {
-      const ip = response.data.output.wanConnection.ipAddress as string;
-      observer.next(ip);
-      observer.complete();
-    }).catch((error) => {
-      observer.error(error);
-    })
+    apis.wanInfo()
+      .then((response) => {
+        const ip = response.data.InternetConnection.IPv4.IP as string;
+        observer.next(ip);
+        observer.complete();
+      }).catch((error) => {
+        observer.error(error);
+      });
+  });
+}
+
+export function getPublicIpFromLinkSys(): Observable<string> {
+  const apis = new LinkSysApis(
+    axios,
+    process.env.LINK_SYS_ENDPOINT!,
+    process.env.LINK_SYS_AUTHORIZATION!,
+  );
+  return new Observable<string>((observer) => {
+    apis.getWanStatus()
+      .then((response) => {
+        const ip = response.data.output.wanConnection.ipAddress as string;
+        observer.next(ip);
+        observer.complete();
+      }).catch((error) => {
+        observer.error(error);
+      });
   })
 }
 

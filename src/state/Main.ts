@@ -1,3 +1,4 @@
+import { GetPublicIp } from '../internal/GetPublicIp';
 import { Observable } from "rxjs";
 import { map, timeout } from "rxjs/operators";
 import { FeedbackLoop, system, Feedbacks, defaultRetryStrategy } from "rxfeedback";
@@ -12,7 +13,6 @@ export namespace Main {
         publicIp: string | null,
         publicIpError: any | null,
         triggerGetPublicIp: boolean,
-
         updateDomainIpError: any | null,
         triggerUpdateDomainIp: boolean,
     }
@@ -94,7 +94,7 @@ export namespace Main {
     }
 
     export function rxSystem(
-        getPublicIp: () => Observable<string>,
+        getPublicIp: GetPublicIp,
         updateIp: UpdateIp,
         feedback: FeedbackLoop<State, Mutation>[]
     ): Observable<State> {

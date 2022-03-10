@@ -1,13 +1,13 @@
-import { updateInterval, provider } from '../config';
-import { interval } from 'rxjs';
+import { updateInterval, provider, publicIpProvider } from '../config';
+import { interval, EMPTY } from 'rxjs';
 import { Main } from '../state/Main';
 import { map } from 'rxjs/operators';
 import { logBeauty } from '../public/logger';
-import { chooseUpdateIp } from '../service';
-import { getPublicIp } from "../service/getpublicip";
+import { chooseGetPublicIp, chooseUpdateIp } from '../service';
 
 (async () => {
 
+    const getPublicIp = chooseGetPublicIp(publicIpProvider)
     const updateIp = chooseUpdateIp(provider)
 
     Main.rxSystem(
@@ -19,5 +19,4 @@ import { getPublicIp } from "../service/getpublicip";
         logBeauty(value)
         console.log('')
     })
-
 })()
